@@ -1,5 +1,4 @@
 namespace: keda
-
 deployments:
   kedaAddOnsHttpInterceptor:
     name: keda-add-ons-http-interceptor
@@ -7,36 +6,33 @@ deployments:
     image: registry.k8s.io/pause:3.10
     resources:
       requests:
-        cpu: 250m
-        memory: 20Mi
+        cpu: 20m
+        memory: 52Mi
       limits:
-        cpu: 500m
-        memory: 512Mi
-
+        cpu: 100m
+        memory: 155Mi
   kedaAddOnsHttpExternalScaler:
     name: keda-add-ons-http-external-scaler
     containerName: keda-add-ons-http-external-scaler
     image: registry.k8s.io/pause:3.10
     resources:
       requests:
-        cpu: 250m
-        memory: 256Mi
+        cpu: 31m
+        memory: 26Mi
       limits:
-        cpu: 500m
-        memory: 512Mi
-
+        cpu: 152m
+        memory: 79Mi
   kedaOperatorMetricsApiserver:
     name: keda-operator-metrics-apiserver
     containerName: keda-operator-metrics-apiserver
     image: registry.k8s.io/pause:3.10
     resources:
       requests:
-        cpu: 100m
-        memory: 100Mi
+        cpu: 20m
+        memory: 44Mi
       limits:
-        cpu: "1"
-        memory: 1000Mi
-
+        cpu: 100m
+        memory: 131Mi
   kedaOperator:
     name: keda-operator
     containers:
@@ -45,11 +41,11 @@ deployments:
         image: registry.k8s.io/pause:3.10
         resources:
           requests:
-            cpu: 100m
-            memory: 100Mi
+            cpu: 20m
+            memory: 60Mi
           limits:
-            cpu: "1"
-            memory: 1000Mi
+            cpu: 100m
+            memory: 180Mi
       auditSidecar:
         name: audit-sidecar
         image: registry.k8s.io/pause:3.10
@@ -60,19 +56,17 @@ deployments:
           limits:
             cpu: 25m
             memory: 64Mi
-
   kedaAdmissionWebhooks:
     name: keda-admission-webhooks
     containerName: keda-admission-webhooks
     image: registry.k8s.io/pause:3.10
     resources:
       requests:
-        cpu: 100m
-        memory: 100Mi
+        cpu: 20m
+        memory: 23Mi
       limits:
-        cpu: "1"
-        memory: 1000Mi
-
+        cpu: 100m
+        memory: 70Mi
   kedifyAgent:
     name: kedify-agent
     containers:
@@ -81,9 +75,11 @@ deployments:
         image: registry.k8s.io/pause:3.10
         resources:
           requests:
-            memory: 300Mi
+            memory: 82Mi
+            cpu: 346m
           limits:
-            memory: 1.0Gi
+            memory: 246Mi
+            cpu: 1728m
       proxy:
         name: proxy
         image: registry.k8s.io/pause:3.10
