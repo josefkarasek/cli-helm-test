@@ -1,0 +1,6 @@
+apiVersion: v2
+name: kedify-recommendations-demo
+description: Demo chart for Kedify recommendation patching.
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

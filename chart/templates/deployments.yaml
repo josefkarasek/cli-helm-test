@@ -1,0 +1,129 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployments.kedaAddOnsHttpInterceptor.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Values.deployments.kedaAddOnsHttpInterceptor.name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Values.deployments.kedaAddOnsHttpInterceptor.name }}
+    spec:
+      containers:
+        - name: {{ .Values.deployments.kedaAddOnsHttpInterceptor.containerName }}
+          image: {{ .Values.deployments.kedaAddOnsHttpInterceptor.image }}
+          resources:
+{{ toYaml .Values.deployments.kedaAddOnsHttpInterceptor.resources | indent 12 }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployments.kedaAddOnsHttpExternalScaler.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Values.deployments.kedaAddOnsHttpExternalScaler.name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Values.deployments.kedaAddOnsHttpExternalScaler.name }}
+    spec:
+      containers:
+        - name: {{ .Values.deployments.kedaAddOnsHttpExternalScaler.containerName }}
+          image: {{ .Values.deployments.kedaAddOnsHttpExternalScaler.image }}
+          resources:
+{{ toYaml .Values.deployments.kedaAddOnsHttpExternalScaler.resources | indent 12 }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployments.kedaOperatorMetricsApiserver.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Values.deployments.kedaOperatorMetricsApiserver.name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Values.deployments.kedaOperatorMetricsApiserver.name }}
+    spec:
+      containers:
+        - name: {{ .Values.deployments.kedaOperatorMetricsApiserver.containerName }}
+          image: {{ .Values.deployments.kedaOperatorMetricsApiserver.image }}
+          resources:
+{{ toYaml .Values.deployments.kedaOperatorMetricsApiserver.resources | indent 12 }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployments.kedaOperator.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Values.deployments.kedaOperator.name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Values.deployments.kedaOperator.name }}
+    spec:
+      containers:
+{{- range $container := .Values.deployments.kedaOperator.containers }}
+        - name: {{ $container.name }}
+          image: {{ $container.image }}
+          resources:
+{{ toYaml $container.resources | indent 12 }}
+{{- end }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployments.kedaAdmissionWebhooks.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Values.deployments.kedaAdmissionWebhooks.name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Values.deployments.kedaAdmissionWebhooks.name }}
+    spec:
+      containers:
+        - name: {{ .Values.deployments.kedaAdmissionWebhooks.containerName }}
+          image: {{ .Values.deployments.kedaAdmissionWebhooks.image }}
+          resources:
+{{ toYaml .Values.deployments.kedaAdmissionWebhooks.resources | indent 12 }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployments.kedifyAgent.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Values.deployments.kedifyAgent.name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Values.deployments.kedifyAgent.name }}
+    spec:
+      containers:
+{{- range $container := .Values.deployments.kedifyAgent.containers }}
+        - name: {{ $container.name }}
+          image: {{ $container.image }}
+          resources:
+{{ toYaml $container.resources | indent 12 }}
+{{- end }}

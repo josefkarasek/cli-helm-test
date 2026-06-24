@@ -1,0 +1,96 @@
+namespace: keda
+
+deployments:
+  kedaAddOnsHttpInterceptor:
+    name: keda-add-ons-http-interceptor
+    containerName: keda-add-ons-http-interceptor
+    image: registry.k8s.io/pause:3.10
+    resources:
+      requests:
+        cpu: 250m
+        memory: 20Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+
+  kedaAddOnsHttpExternalScaler:
+    name: keda-add-ons-http-external-scaler
+    containerName: keda-add-ons-http-external-scaler
+    image: registry.k8s.io/pause:3.10
+    resources:
+      requests:
+        cpu: 250m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+
+  kedaOperatorMetricsApiserver:
+    name: keda-operator-metrics-apiserver
+    containerName: keda-operator-metrics-apiserver
+    image: registry.k8s.io/pause:3.10
+    resources:
+      requests:
+        cpu: 100m
+        memory: 100Mi
+      limits:
+        cpu: "1"
+        memory: 1000Mi
+
+  kedaOperator:
+    name: keda-operator
+    containers:
+      operator:
+        name: keda-operator
+        image: registry.k8s.io/pause:3.10
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: "1"
+            memory: 1000Mi
+      auditSidecar:
+        name: audit-sidecar
+        image: registry.k8s.io/pause:3.10
+        resources:
+          requests:
+            cpu: 5m
+            memory: 16Mi
+          limits:
+            cpu: 25m
+            memory: 64Mi
+
+  kedaAdmissionWebhooks:
+    name: keda-admission-webhooks
+    containerName: keda-admission-webhooks
+    image: registry.k8s.io/pause:3.10
+    resources:
+      requests:
+        cpu: 100m
+        memory: 100Mi
+      limits:
+        cpu: "1"
+        memory: 1000Mi
+
+  kedifyAgent:
+    name: kedify-agent
+    containers:
+      manager:
+        name: manager
+        image: registry.k8s.io/pause:3.10
+        resources:
+          requests:
+            memory: 300Mi
+          limits:
+            memory: 1.0Gi
+      proxy:
+        name: proxy
+        image: registry.k8s.io/pause:3.10
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 50m
+            memory: 64Mi
