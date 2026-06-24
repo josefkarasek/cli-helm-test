@@ -89,6 +89,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           chmod +x ./scripts/apply-kedify-recommendations.sh
           ./scripts/apply-kedify-recommendations.sh
 
