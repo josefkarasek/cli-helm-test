@@ -29,7 +29,8 @@ Optional repository variables:
 3. Fetches live recommendations with `kedify list recommendations`.
 4. Filters to waiting Deployment recommendations and deduplicates them down to unique workloads.
 5. Runs `kedify apply recommendations` once per workload against `chart/values.yaml`.
-6. Pushes a branch and opens or updates a pull request with `gh` if the values file changed.
+6. Skips workloads that cannot be safely mapped to this demo chart and keeps applying the rest.
+7. Pushes a branch and opens or updates a pull request with `gh` if the values file changed.
 
 ## Local Usage
 

@@ -49,6 +49,10 @@ if [ "${#workloads[@]}" -eq 0 ]; then
   exit 0
 fi
 
+patched_count=0
+skipped_count=0
+unexpected_failures=0
+
 for encoded in "${workloads[@]}"; do
   workload_json="$(printf '%s' "${encoded}" | base64 --decode)"
   kind="$(printf '%s' "${workload_json}" | jq -r '.kind')"
@@ -58,6 +62,7 @@ for encoded in "${workloads[@]}"; do
   result_file="${results_dir}/${kind}-${name}-${namespace}.json"
 
   echo "Applying recommendations for ${target} in namespace ${namespace}" >&2
+  set +e
   kedify --apiurl "${api_url}" --token "${KEDIFY_TOKEN}" \
     apply recommendations "${target}" \
     --namespace "${namespace}" \
@@ -66,6 +71,41 @@ for encoded in "${workloads[@]}"; do
     --recommendations-file "${recommendations_file}" \
     --min-confidence "${min_confidence}" \
     --format json > "${result_file}"
+  status=$?
+  set -e
 
   cat "${result_file}"
+
+  if [ "${status}" -eq 0 ]; then
+    patched_count=$((patched_count + 1))
+    continue
+  fi
+
+  if jq -e '.result == "failed"' "${result_file}" >/dev/null 2>&1; then
+    if jq -e '
+      [.reasons[]?.code]
+      | length > 0
+      and all(
+        . == "not_found"
+        or . == "unsupported"
+        or . == "ambiguous"
+        or . == "below_confidence_threshold"
+      )
+    ' "${result_file}" >/dev/null 2>&1; then
+      skipped_count=$((skipped_count + 1))
+      echo "Skipping ${target}: no safe patch could be produced for this demo chart." >&2
+      continue
+    fi
+  fi
+
+  unexpected_failures=$((unexpected_failures + 1))
+  echo "Unexpected failure while applying ${target}." >&2
 done
+
+echo "Patched workloads: ${patched_count}" >&2
+echo "Skipped workloads: ${skipped_count}" >&2
+
+if [ "${unexpected_failures}" -gt 0 ]; then
+  echo "Unexpected workload failures: ${unexpected_failures}" >&2
+  exit 1
+fi
